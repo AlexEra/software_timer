@@ -12,6 +12,8 @@
 - добавить опцию цикличности, чтобы автоматически его перезапускать или ограничиться одним срабатыванием
  */
 
+namespace SWtimer {
+
 template<typename T>
 class SoftwareTimer {
 public:
@@ -130,3 +132,5 @@ template<typename T>
 bool SoftwareTimer<T>::is_period_elapsed(void) {
     return period_elapsed;
 }
+
+} /* namespace SWtimer */
