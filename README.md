@@ -1,2 +1,2 @@
 # software_timer
-Software timer class wihtout hardware dependencies
+Software timer class without hardware dependencies
