@@ -3,8 +3,6 @@
 /**
  * К таймеру:
 - использовать концепт для типа времени (лучше по поддерживаемым операциям, чтобы можно было использовать классы с переопределёнными параметрами)
-- убрать в check возвращение переменной или поменять смысл
-- добавить опцию цикличности, чтобы автоматически его перезапускать или ограничиться одним срабатыванием
  */
 
 namespace SWtimer {
@@ -37,15 +35,6 @@ public:
   }
 
   /**
-   * @brief Update timer ticks and flag
-   */
-  void update(void) {
-    if (is_enabled_status_) {
-      timestamp_ = time_getter();
-    }
-  }
-
-  /**
    * @brief Reset the timer, set 0 to all ticks and false to flag
    */
   void reset(void) {
@@ -57,39 +46,49 @@ public:
   /**
    * @brief Check if timer period is elapsed
    */
-  bool check(void) {
-    // TODO: think about using code from `update` method
-    if (is_enabled_status_) {
-      period_elapsed_ = (time_getter() - timestamp_) >= period;
-      if (period_elapsed_ && callback) {
+  bool check_timer(void) {
+    if (!is_enabled_status_) {
+      return false;
+    }
+    period_elapsed_ = (time_getter() - timestamp_) >= period;
+    if (period_elapsed_) {
+      if (callback) {
         // to use callback when period is elapsed
-        // TODO: use additional options connected with autoreloading etc.
         callback();
       }
-      return period_elapsed_;
+      if (is_autoreload_enabled) {
+        // work in the loop
+        period_elapsed_ = false;
+        timestamp = time_getter();
+      } else {
+        // single job
+        is_enabled_status_ = false; 
+      }
     }
-    return false;
+    return period_elapsed_;
   }
 
   /**
    * @brief Get is enabled timer state
    */
-  bool is_enabled(void) {
+  bool is_enabled(void) const {
     return is_enabled_status_;
   }
 
   /**
    * @brief Get is timer period elapsed
    */
-  bool is_period_elapsed(void) {
+  bool is_period_elapsed(void) const {
     return period_elapsed_;
   }
+
 public:
-    T period{0};
+  T period{0}; // FIXME: type T should be able to casting to int
+  bool is_autoreload_enabled{false};
 protected:
-    T timestamp_{0};
-    bool is_enabled_status_{false};
-    bool period_elapsed_{false};
+  T timestamp_{0}; // FIXME: type T should be able to casting to int
+  bool is_enabled_status_{false};
+  bool period_elapsed_{false};
 };
 
 } /* namespace SWtimer */
