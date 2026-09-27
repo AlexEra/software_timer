@@ -11,13 +11,6 @@ template<typename T, T (*time_getter)(void), void (*callback)(void) = nullptr>
 class SoftwareTimer {
 public:
   /**
-   * @brief Init to call instead of constructor with parameters
-   */
-  void init(T timer_period) {
-    period = timer_period;
-  }
-
-  /**
    * @brief Start timer
    */
   void start(void) {
