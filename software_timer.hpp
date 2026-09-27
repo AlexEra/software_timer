@@ -38,8 +38,8 @@ public:
    * @brief Reset the timer, set 0 to all ticks and false to flag
    */
   void reset(void) {
-    period_elapsed = false;
-    timestamp = 0;
+    period_elapsed_ = false;
+    timestamp_ = 0;
     period = 0;
   }
 
@@ -59,7 +59,7 @@ public:
       if (is_autoreload_enabled) {
         // work in the loop
         period_elapsed_ = false;
-        timestamp = time_getter();
+        timestamp_ = time_getter();
       } else {
         // single job
         is_enabled_status_ = false; 
