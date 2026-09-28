@@ -81,10 +81,10 @@ public:
   }
 
 public:
-  T period{0}; // FIXME: type T should be able to casting to int
+  T period{0};
   bool is_autoreload_enabled{false};
 protected:
-  T timestamp_{0}; // FIXME: type T should be able to casting to int
+  T timestamp_{0};
   bool is_enabled_status_{false};
   bool period_elapsed_{false};
 };
