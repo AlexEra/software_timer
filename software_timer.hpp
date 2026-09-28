@@ -1,13 +1,18 @@
 #pragma once
 
-/**
- * К таймеру:
-- использовать концепт для типа времени (лучше по поддерживаемым операциям, чтобы можно было использовать классы с переопределёнными параметрами)
- */
+#include <concepts>
 
 namespace SWtimer {
 
-template<typename T, T (*time_getter)(void), void (*callback)(void) = nullptr>
+template<typename T>
+concept time_var = requires (T var) {
+  var - var;
+  var = 0;
+  var = var;
+  var >= var;
+};
+
+template<time_var T, T (*time_getter)(void), void (*callback)(void) = nullptr>
 class SoftwareTimer {
 public:
   /**
