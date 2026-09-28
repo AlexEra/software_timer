@@ -45,7 +45,7 @@ public:
     }
     period_elapsed_ = (time_getter() - timestamp_) >= period;
     if (period_elapsed_) {
-      if (callback) {
+      if (callback != nullptr) {
         // to use callback when period is elapsed
         callback();
       }
