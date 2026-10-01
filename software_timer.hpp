@@ -1,13 +1,18 @@
 #pragma once
 
-/**
- * К таймеру:
-- использовать концепт для типа времени (лучше по поддерживаемым операциям, чтобы можно было использовать классы с переопределёнными параметрами)
- */
+#include <concepts>
 
 namespace SWtimer {
 
-template<typename T, T (*time_getter)(void), void (*callback)(void) = nullptr>
+template<typename T>
+concept time_var = requires (T var) {
+  var - var;
+  var = 0;
+  var = var;
+  var >= var;
+};
+
+template<time_var T, T (*time_getter)(void), void (*callback)(void) = nullptr>
 class SoftwareTimer {
 public:
   /**
@@ -45,7 +50,7 @@ public:
     }
     period_elapsed_ = (time_getter() - timestamp_) >= period;
     if (period_elapsed_) {
-      if (callback) {
+      if (callback != nullptr) {
         // to use callback when period is elapsed
         callback();
       }
@@ -76,10 +81,10 @@ public:
   }
 
 public:
-  T period{0}; // FIXME: type T should be able to casting to int
+  T period{0};
   bool is_autoreload_enabled{false};
 protected:
-  T timestamp_{0}; // FIXME: type T should be able to casting to int
+  T timestamp_{0};
   bool is_enabled_status_{false};
   bool period_elapsed_{false};
 };
