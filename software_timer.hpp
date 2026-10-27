@@ -12,7 +12,15 @@ concept time_var = requires (T var) {
   var >= var;
 };
 
-template<time_var T, T (*time_getter)(void), void (*callback)(void) = nullptr>
+namespace types {
+  template<typename T>
+  using time_getter_t = T (*)(void);
+}
+
+template<time_var T, types::time_getter_t<T> time_getter,
+  void (*callback)(void) = nullptr
+>
+requires (time_getter != nullptr)
 class SoftwareTimer {
 public:
   /**
